@@ -1,0 +1,45 @@
+@import 'variables';
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 15px 0;
+}
+.headerWithFilter {
+  cursor: pointer;
+}
+
+.tableHeader {
+  height: 30px;
+  background-color: $main;
+  color: white;
+}
+
+.columns {
+  border: 1px solid #e3e6ec;
+  color: #474955;
+  padding: 10px 10px;
+}
+
+.sortImage {
+  width: 20px;
+  margin-left: 10px;
+  pointer-events: none;
+}
+
+.copyButton {
+  padding: 10px;
+  background-color: $main;
+  color: white;
+  border-radius: 15px;
+  transition: 0.3s;
+  &:hover {
+    background-color: $hover;
+  }
+}
+
+.shortLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

@@ -1,0 +1,19 @@
+@import 'variables';
+
+.navbar {
+  display: flex;
+  gap: 30px;
+  justify-content: flex-end;
+  padding: 10px;
+  // background-color: $main;
+  color: #fff;
+  border-radius: 5px;
+  margin-bottom: 30px;
+}
+
+.link {
+  color: #000;
+  &:hover {
+    text-decoration: underline;
+  }
+}

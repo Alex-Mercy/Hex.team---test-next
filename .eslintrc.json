@@ -1,8 +1,10 @@
 {
   "extends": "next/core-web-vitals",
+  "plugins": ["prettier"],
   "rules": {
     "no-console": "warn",
     "prefer-const": "warn",
+    "prettier/prettier": 2,
     "import/order": [
       2,
       {
