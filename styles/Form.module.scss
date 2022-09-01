@@ -1,10 +1,15 @@
 @import 'variables';
 
+.inputBlock {
+  display: flex;
+  flex-direction: column;
+}
+
 .form {
   display: flex;
   justify-content: center;
   gap: 30px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 .input {
   padding: 16px 20px 17px 20px;
@@ -25,7 +30,12 @@
   color: white;
   border-radius: 15px;
   transition: 0.3s;
+  cursor: pointer;
   &:hover {
     background-color: $hover;
   }
+}
+
+.error {
+  color: rgb(204, 47, 47);
 }
