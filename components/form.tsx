@@ -14,7 +14,7 @@ const Form = () => {
     handleSubmit,
     reset,
   } = useForm<FormValue>({
-    mode: 'onBlur',
+    mode: 'onSubmit',
   })
 
   const onSubmit = (data: FormValue) => {

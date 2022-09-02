@@ -1,15 +1,18 @@
 import React from 'react'
 let cn = require('classnames')
 import { useForm } from 'react-hook-form'
+import { authApi } from '../store/api/authApi'
 
 import styles from '../styles/Login.module.scss'
 
-type FormValues = {
-  email: string
+export type FormValues = {
+  username: string
   password: string
 }
 
 const Login = () => {
+  const [login, { data }] = authApi.useLoginMutation()
+
   const {
     register,
     formState: { errors },
@@ -18,7 +21,8 @@ const Login = () => {
     mode: 'onBlur',
   })
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = async (data: FormValues) => {
+    await login(data)
     console.log(data)
   }
 
@@ -27,14 +31,14 @@ const Login = () => {
       <h1 className={styles.header}>Log In</h1>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <input
-          {...register('email', {
+          {...register('username', {
             required: 'Email is required.',
             pattern: { value: /\S+@\S+\.\S+/, message: 'Invalid email format' },
           })}
           placeholder='Email Address'
           className={cn(styles.input, styles.email)}
         />
-        {errors?.email && <div className={styles.errorMessage}>{errors.email.message}</div>}
+        {errors?.username && <div className={styles.errorMessage}>{errors.username.message}</div>}
         <input
           {...register('password', {
             required: 'Password is required.',
