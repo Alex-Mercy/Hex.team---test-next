@@ -1,8 +1,11 @@
 import { combineReducers, configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
+
 import { authApi } from './api/authApi'
+import { linkApi } from './api/linkApi'
 
 const rootReducer = combineReducers({
   [authApi.reducerPath]: authApi.reducer,
+  [linkApi.reducerPath]: linkApi.reducer,
 })
 
 export const store = configureStore({

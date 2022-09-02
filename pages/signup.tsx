@@ -1,15 +1,18 @@
+import { useRouter } from 'next/router'
 import React, { FC } from 'react'
-let cn = require('classnames')
+
 import { useForm } from 'react-hook-form'
+
+import { authApi, FormValues } from '../store/api/authApi'
 
 import styles from '../styles/Login.module.scss'
 
-type FormValues = {
-  email: string
-  password: string
-}
+const cn = require('classnames')
 
 const SignUp: FC = () => {
+  const [signup, { data, error, isSuccess }] = authApi.useRegisterMutation()
+  const router = useRouter()
+
   const {
     register,
     formState: { errors },
@@ -18,23 +21,25 @@ const SignUp: FC = () => {
     mode: 'onBlur',
   })
 
-  const onSubmit = (data: FormValues) => {
-    console.log(data)
+  const onSubmit = async (data: FormValues) => {
+    await signup(data)
   }
+
+  isSuccess && router.push('/login')
 
   return (
     <div className={styles.login}>
       <h1 className={styles.header}>Sign Up</h1>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <input
-          {...register('email', {
+          {...register('username', {
             required: 'Email is required.',
             pattern: { value: /\S+@\S+\.\S+/, message: 'Invalid email format' },
           })}
           placeholder='Email Address'
           className={cn(styles.input, styles.email)}
         />
-        {errors?.email && <div className={styles.errorMessage}>{errors.email.message}</div>}
+        {errors?.username && <div className={styles.errorMessage}>{errors.username.message}</div>}
         <input
           {...register('password', {
             required: 'Password is required.',
@@ -45,10 +50,15 @@ const SignUp: FC = () => {
           className={cn(styles.input, styles.password)}
         />
         {errors?.password && <div className={styles.errorMessage}>{errors.password.message}</div>}
+
         <button type='submit' className={styles.button}>
           Sign Up
         </button>
       </form>
+      {
+        // @ts-ignore
+        error?.data && <div className={styles.errorMessage}>Sorry, but {error.data.detail}</div>
+      }
     </div>
   )
 }

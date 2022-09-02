@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+
+import { linkApi } from '../store/api/linkApi'
 
 import styles from '../styles/Form.module.scss'
 
@@ -8,6 +10,10 @@ type FormValue = {
 }
 
 const Form = () => {
+  const [linkValue, setLinkValue] = useState('')
+
+  const [getLinks, {}] = linkApi.useShortLinkMutation()
+
   const {
     register,
     formState: { errors, isValid },
@@ -17,8 +23,12 @@ const Form = () => {
     mode: 'onSubmit',
   })
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLinkValue(e.target.value)
+  }
+
   const onSubmit = (data: FormValue) => {
-    console.log(data)
+    getLinks(linkValue)
     reset()
   }
 
@@ -36,6 +46,8 @@ const Form = () => {
           })}
           placeholder='Shorten a link here...'
           className={styles.input}
+          value={linkValue}
+          onChange={handleChange}
         />
         <button type='submit' className={styles.button}>
           {errors?.link ? <div className={styles.error}>{errors.link.message} </div> : 'Shorten'}

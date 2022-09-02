@@ -1,5 +1,16 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react'
-import { FormValues } from '../../pages/login'
+
+export type FormValues = {
+  username: string
+  password: string
+}
+
+type LoginResponseType = {
+  data: {
+    access_token: string
+    token_type: string
+  }
+}
 
 export const authApi = createApi({
   reducerPath: 'authApi',
@@ -17,13 +28,10 @@ export const authApi = createApi({
     //     transformResponse: (response: MeResponseType) => response.data,
     //     providesTags: ['Auth']
     // }),
-    login: build.mutation<any, FormValues>({
+    login: build.mutation<LoginResponseType, FormValues>({
       query: ({ username, password }) => ({
         url: `login`,
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-        },
         body: new URLSearchParams({
           username,
           password,
@@ -33,16 +41,8 @@ export const authApi = createApi({
     }),
     register: build.mutation<any, FormValues>({
       query: ({ username, password }) => ({
-        url: `register`,
-        credentials: 'include',
+        url: `register?username=${username}&password=${password}`,
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-        },
-        body: new URLSearchParams({
-          username,
-          password,
-        }),
       }),
       invalidatesTags: ['Auth'],
     }),

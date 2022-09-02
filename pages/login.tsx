@@ -1,14 +1,12 @@
 import React from 'react'
-let cn = require('classnames')
+
 import { useForm } from 'react-hook-form'
-import { authApi } from '../store/api/authApi'
+
+import { authApi, FormValues } from '../store/api/authApi'
 
 import styles from '../styles/Login.module.scss'
 
-export type FormValues = {
-  username: string
-  password: string
-}
+const cn = require('classnames')
 
 const Login = () => {
   const [login, { data }] = authApi.useLoginMutation()
@@ -22,8 +20,10 @@ const Login = () => {
   })
 
   const onSubmit = async (data: FormValues) => {
-    await login(data)
-    console.log(data)
+    await login(data).then((res) =>
+      //@ts-ignore
+      localStorage.setItem('accessToken', res.data.access_token),
+    )
   }
 
   return (
