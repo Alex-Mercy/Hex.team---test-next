@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { linkApi } from '../store/api/linkApi'
@@ -9,10 +9,15 @@ type FormValue = {
   link: string
 }
 
-const Form = () => {
+type FormProps = {
+  token: string
+  shortLink: (link: string) => void
+}
+
+const Form: FC<FormProps> = ({ token, shortLink }) => {
   const [linkValue, setLinkValue] = useState('')
 
-  const [getLinks, {}] = linkApi.useShortLinkMutation()
+  // const [getLinks, {}] = linkApi.useShortLinkMutation()
 
   const {
     register,
@@ -28,7 +33,7 @@ const Form = () => {
   }
 
   const onSubmit = (data: FormValue) => {
-    getLinks(linkValue)
+    shortLink(linkValue)
     reset()
   }
 

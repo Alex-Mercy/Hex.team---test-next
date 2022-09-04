@@ -12,6 +12,11 @@ export type LinkResponseType = {
   counter: number
 }
 
+export type ShortLink = {
+  link: string
+  token: string
+}
+
 export const linkApi = createApi({
   reducerPath: 'linkApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'http://79.143.31.216/' }),
@@ -19,7 +24,7 @@ export const linkApi = createApi({
   endpoints: (build) => ({
     getLinks: build.query<LinkResponseType[], string>({
       query: (token) => ({
-        url: `http://79.143.31.216/statistics?order=asc_short&offset=0&limit=10`,
+        url: `statistics?order=asc_short&offset=0`,
         headers: {
           accept: 'application/json',
           Authorization: `Bearer ${token}`,
@@ -27,13 +32,13 @@ export const linkApi = createApi({
       }),
       providesTags: ['Link'],
     }),
-    shortLink: build.mutation<LinkResponseType, string>({
-      query: (link) => ({
+    shortLink: build.mutation<LinkResponseType, ShortLink>({
+      query: ({ link, token }) => ({
         url: `link=${link}`,
         method: 'POST',
         headers: {
           accept: 'application/json',
-          Authorization: `Bearer ${'UuMeVrg_U8JdqQnEGap8l3nO5G5JcbpOEkQp6pScMSRRbFaSVZPzPOe3WHZI2tFQUas'}`,
+          Authorization: `Bearer ${token}`,
         },
       }),
       invalidatesTags: ['Link'],
