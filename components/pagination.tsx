@@ -1,6 +1,7 @@
 import cn from 'classnames'
+import Link from 'next/link'
 
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import { useDispatch } from 'react-redux'
 
@@ -11,27 +12,43 @@ import styles from '../styles/Pagination.module.scss'
 // import { setCurrentPage } from '../../../store/tableReducer';
 
 type PaginationProps = {
-  qty?: number
   setPage: (page: number) => void
+  currentPage: number
+  token: string
+  perPage: number
 }
 
-const Pagination: FC<PaginationProps> = ({ qty, setPage }) => {
-  const [currentPage, setCurrentPage] = useState(1)
-  const perPage = 100
-  // const [pageQty, setPageQty] = useState(100)
+const Pagination: FC<PaginationProps> = ({ setPage, currentPage, token, perPage }) => {
+  const [qty, setQty] = useState(0)
+
+  useEffect(() => {
+    getQty()
+  }, [])
 
   const pagesCount = qty && Math.ceil(qty / perPage)
+  if (pagesCount === null) return null
 
   const pages = Array(pagesCount)
     .fill(0)
     .map((e, i) => i + 1)
 
   const onIncrementPage = () => {
-    setCurrentPage(currentPage + 1)
+    setPage(currentPage + 1)
   }
 
   const onDecrementPage = () => {
-    setCurrentPage(currentPage - 1)
+    setPage(currentPage - 1)
+  }
+
+  const getQty = async () => {
+    const res = await fetch(`http://79.143.31.216/statistics`, {
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    const data = await res.json()
+    setQty(data.length)
   }
 
   return (
@@ -41,7 +58,6 @@ const Pagination: FC<PaginationProps> = ({ qty, setPage }) => {
           [styles.notActive]: currentPage < 2,
         })}
         onClick={onDecrementPage}
-        href={`/${currentPage - 1}`}
       >
         &laquo;
       </a>
@@ -49,11 +65,10 @@ const Pagination: FC<PaginationProps> = ({ qty, setPage }) => {
         return (
           <a
             key={index}
-            href={`/${page}`}
             className={cn({
               [styles.active]: currentPage === page,
             })}
-            onClick={() => setCurrentPage(page)}
+            onClick={() => setPage(page)}
           >
             {page}
           </a>
@@ -61,7 +76,6 @@ const Pagination: FC<PaginationProps> = ({ qty, setPage }) => {
       })}
       <a
         onClick={onIncrementPage}
-        href={`/${currentPage + 1}`}
         className={cn({
           [styles.notActive]: currentPage === pagesCount,
         })}

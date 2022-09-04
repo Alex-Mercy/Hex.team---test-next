@@ -14,17 +14,23 @@ const Home: NextPage = () => {
   const [token, setToken] = useState('')
   const [links, setlinks] = useState([])
   const [currentPage, setCurerntPAge] = useState(1)
+  const perPage = 100
 
   const getLinks = async () => {
-    const res = await fetch(`http://79.143.31.216/statistics?order=asc_short&offset=0`, {
-      headers: {
-        accept: 'application/json',
-        Authorization: `Bearer ${token}`,
+    const res = await fetch(
+      `http://79.143.31.216/statistics?order=asc_counter&offset=${(currentPage - 1) * perPage}&limit=${perPage}`,
+      {
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
       },
-    })
+    )
     const data = await res.json()
     setlinks(data)
   }
+
+  console.log(currentPage)
 
   const shortLink = async (link: string) => {
     const res = await fetch(`http://79.143.31.216/squeeze?link=${link}`, {
@@ -35,7 +41,6 @@ const Home: NextPage = () => {
       },
     })
     const data = await res.json()
-    // console.log(data)
   }
 
   useEffect(() => {
@@ -43,6 +48,10 @@ const Home: NextPage = () => {
     accessToken && setToken(accessToken)
     getLinks()
   }, [])
+
+  useEffect(() => {
+    getLinks()
+  }, [currentPage])
 
   const setPage = (page: number) => {
     setCurerntPAge(page)
@@ -54,7 +63,7 @@ const Home: NextPage = () => {
     <>
       <Form token={token} shortLink={shortLink} />
       <Table data={links} token={token} />
-      <Pagination qty={links.length} setPage={setPage} />
+      <Pagination setPage={setPage} currentPage={currentPage} token={token} perPage={perPage} />
     </>
   )
 }
