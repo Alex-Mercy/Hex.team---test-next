@@ -13,12 +13,24 @@ import type { NextPage } from 'next'
 const Home: NextPage = () => {
   const [token, setToken] = useState('')
   const [links, setlinks] = useState([])
+  const [sortBy, setSortBy] = useState('target')
+  const [isAscOrder, setIsAscOrder] = useState(true)
+
+  // creating an array of headers for the table
+  const headers = [
+    { id: 1, type: 'target', name: 'Long Link' },
+    { id: 2, type: 'short', name: 'Short Link' },
+    { id: 3, type: 'counter', name: 'Counter' },
+  ]
+
   const [currentPage, setCurerntPAge] = useState(1)
   const perPage = 100
 
   const getLinks = async () => {
     const res = await fetch(
-      `http://79.143.31.216/statistics?order=asc_counter&offset=${(currentPage - 1) * perPage}&limit=${perPage}`,
+      `http://79.143.31.216/statistics?order=${isAscOrder ? 'asc' : 'desc'}_${sortBy}&offset=${
+        (currentPage - 1) * perPage
+      }&limit=${perPage}`,
       {
         headers: {
           accept: 'application/json',
@@ -30,7 +42,13 @@ const Home: NextPage = () => {
     setlinks(data)
   }
 
-  console.log(currentPage)
+  console.log(sortBy)
+
+  const changeSortOrder = (headerName: string) => {
+    setIsAscOrder(!isAscOrder)
+    const type = headers.find((item) => item.name === headerName)?.type
+    type && setSortBy(type)
+  }
 
   const shortLink = async (link: string) => {
     const res = await fetch(`http://79.143.31.216/squeeze?link=${link}`, {
@@ -51,7 +69,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     getLinks()
-  }, [currentPage])
+  }, [currentPage, isAscOrder, sortBy])
 
   const setPage = (page: number) => {
     setCurerntPAge(page)
@@ -62,7 +80,14 @@ const Home: NextPage = () => {
   return (
     <>
       <Form token={token} shortLink={shortLink} />
-      <Table data={links} token={token} />
+      <Table
+        data={links}
+        token={token}
+        headers={headers}
+        isAscOrder={isAscOrder}
+        sortBy={sortBy}
+        changeSortOrder={changeSortOrder}
+      />
       <Pagination setPage={setPage} currentPage={currentPage} token={token} perPage={perPage} />
     </>
   )
