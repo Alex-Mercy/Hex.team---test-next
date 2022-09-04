@@ -38,6 +38,10 @@ const Table: FC<TableProps> = ({ data, token, headers, isAscOrder, sortBy, chang
     changeSortOrder(e.currentTarget.innerText)
   }
 
+  const copyLink = (link: string) => {
+    navigator.clipboard.writeText(`http://79.143.31.216/s/${link}`)
+  }
+
   return (
     <div className={styles.tableWrapper}>
       <table className={styles.table}>
@@ -66,7 +70,7 @@ const Table: FC<TableProps> = ({ data, token, headers, isAscOrder, sortBy, chang
                 <td className={styles.columns}>
                   <div className={styles.shortLink}>
                     {item.short}
-                    <a href='' className={styles.copyButton}>
+                    <a className={styles.copyButton} onClick={() => copyLink(item.short)}>
                       Copy
                     </a>
                   </div>
