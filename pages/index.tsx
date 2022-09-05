@@ -71,6 +71,7 @@ const Home: NextPage = () => {
       },
     })
     const data = await res.json()
+    navigator.clipboard.writeText(`http://79.143.31.216/s/${data.short}`)
   }
 
   useEffect(() => {
@@ -87,15 +88,11 @@ const Home: NextPage = () => {
     setCurerntPAge(page)
   }
 
-  // const { data } = linkApi.useGetLinksQuery(token)
-
   return (
     <>
       <Form token={token} shortLink={shortLink} />
       <Table
-        data={links}
         filteredData={filteredData}
-        token={token}
         headers={headers}
         isAscOrder={isAscOrder}
         sortBy={sortBy}

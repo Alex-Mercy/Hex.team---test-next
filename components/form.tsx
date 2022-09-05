@@ -5,6 +5,8 @@ import { linkApi } from '../store/api/linkApi'
 
 import styles from '../styles/Form.module.scss'
 
+const cn = require('classnames')
+
 type FormValue = {
   link: string
 }
@@ -16,23 +18,24 @@ type FormProps = {
 
 const Form: FC<FormProps> = ({ token, shortLink }) => {
   const [linkValue, setLinkValue] = useState('')
+  const [isCopied, setIsCopied] = useState(false)
 
   const {
     register,
     formState: { errors, isValid },
     handleSubmit,
-    reset,
   } = useForm<FormValue>({
     mode: 'onSubmit',
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsCopied(false)
     setLinkValue(e.target.value)
   }
 
   const onSubmit = (data: FormValue) => {
     shortLink(linkValue)
-    reset()
+    setIsCopied(true)
   }
 
   return (
@@ -52,8 +55,16 @@ const Form: FC<FormProps> = ({ token, shortLink }) => {
           value={linkValue}
           onChange={handleChange}
         />
-        <button type='submit' className={styles.button}>
-          {errors?.link ? <div className={styles.error}>{errors.link.message} </div> : 'Shorten'}
+        <button
+          type='submit'
+          className={cn(
+            {
+              [styles.activeButton]: isCopied,
+            },
+            styles.button,
+          )}
+        >
+          {errors?.link ? <div className={styles.error}>{errors.link.message} </div> : isCopied ? 'Copied' : 'Shorten'}
         </button>
       </form>
     </div>

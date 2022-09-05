@@ -39,3 +39,10 @@
 .error {
   color: rgb(204, 47, 47);
 }
+
+.activeButton {
+  background-color: #7bdcb5;
+  &:hover {
+    background-color: #7bdcb5;
+  }
+}

@@ -18,16 +18,14 @@ type HeaderType = {
 }
 
 type TableProps = {
-  data?: LinkResponseType[]
   filteredData?: any
-  token?: string
   headers: HeaderType[]
   isAscOrder: boolean
   sortBy: string
   changeSortOrder: (sortType: string) => void
 }
 
-const Table: FC<TableProps> = ({ data, token, headers, isAscOrder, sortBy, changeSortOrder, filteredData }) => {
+const Table: FC<TableProps> = ({ headers, isAscOrder, sortBy, changeSortOrder, filteredData }) => {
   const [activeButton, setActiveButton] = useState('')
   let imageSort: any
   if (isAscOrder === true) {
