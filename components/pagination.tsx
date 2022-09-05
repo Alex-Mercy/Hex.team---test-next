@@ -16,9 +16,10 @@ type PaginationProps = {
   currentPage: number
   token: string
   perPage: number
+  setAllData: (data: LinkResponseType[]) => void
 }
 
-const Pagination: FC<PaginationProps> = ({ setPage, currentPage, token, perPage }) => {
+const Pagination: FC<PaginationProps> = ({ setPage, currentPage, token, perPage, setAllData }) => {
   const [qty, setQty] = useState(0)
 
   useEffect(() => {
@@ -48,6 +49,7 @@ const Pagination: FC<PaginationProps> = ({ setPage, currentPage, token, perPage 
       },
     })
     const data = await res.json()
+    setAllData(data)
     setQty(data.length)
   }
 

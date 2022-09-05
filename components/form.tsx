@@ -17,8 +17,6 @@ type FormProps = {
 const Form: FC<FormProps> = ({ token, shortLink }) => {
   const [linkValue, setLinkValue] = useState('')
 
-  // const [getLinks, {}] = linkApi.useShortLinkMutation()
-
   const {
     register,
     formState: { errors, isValid },

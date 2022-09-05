@@ -6,7 +6,9 @@ import Form from '../components/form'
 
 import Pagination from '../components/pagination'
 
-import { linkApi } from '../store/api/linkApi'
+import Search from '../components/search'
+
+import { linkApi, LinkResponseType } from '../store/api/linkApi'
 
 import type { NextPage } from 'next'
 
@@ -15,6 +17,8 @@ const Home: NextPage = () => {
   const [links, setlinks] = useState([])
   const [sortBy, setSortBy] = useState('target')
   const [isAscOrder, setIsAscOrder] = useState(true)
+  const [allData, setAllData] = useState<LinkResponseType[]>([])
+  const [searchValue, setSearchValue] = useState('')
 
   // creating an array of headers for the table
   const headers = [
@@ -25,6 +29,16 @@ const Home: NextPage = () => {
 
   const [currentPage, setCurerntPAge] = useState(1)
   const perPage = 100
+
+  let filteredData = new Array()
+  if (searchValue === '') {
+    filteredData = links
+  } else {
+    const foundData = allData && allData.find((item) => item.target === searchValue || item.short === searchValue)
+    if (foundData) {
+      filteredData[0] = foundData
+    }
+  }
 
   const getLinks = async () => {
     const res = await fetch(
@@ -41,8 +55,6 @@ const Home: NextPage = () => {
     const data = await res.json()
     setlinks(data)
   }
-
-  console.log(sortBy)
 
   const changeSortOrder = (headerName: string) => {
     setIsAscOrder(!isAscOrder)
@@ -82,13 +94,23 @@ const Home: NextPage = () => {
       <Form token={token} shortLink={shortLink} />
       <Table
         data={links}
+        filteredData={filteredData}
         token={token}
         headers={headers}
         isAscOrder={isAscOrder}
         sortBy={sortBy}
         changeSortOrder={changeSortOrder}
       />
-      <Pagination setPage={setPage} currentPage={currentPage} token={token} perPage={perPage} />
+      <div className='footer'>
+        <Search setSearchValue={setSearchValue} />
+        <Pagination
+          setPage={setPage}
+          currentPage={currentPage}
+          token={token}
+          perPage={perPage}
+          setAllData={setAllData}
+        />
+      </div>
     </>
   )
 }

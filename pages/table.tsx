@@ -19,6 +19,7 @@ type HeaderType = {
 
 type TableProps = {
   data?: LinkResponseType[]
+  filteredData?: any
   token?: string
   headers: HeaderType[]
   isAscOrder: boolean
@@ -26,7 +27,8 @@ type TableProps = {
   changeSortOrder: (sortType: string) => void
 }
 
-const Table: FC<TableProps> = ({ data, token, headers, isAscOrder, sortBy, changeSortOrder }) => {
+const Table: FC<TableProps> = ({ data, token, headers, isAscOrder, sortBy, changeSortOrder, filteredData }) => {
+  const [activeButton, setActiveButton] = useState('')
   let imageSort: any
   if (isAscOrder === true) {
     imageSort = sortImageByAsc
@@ -39,6 +41,7 @@ const Table: FC<TableProps> = ({ data, token, headers, isAscOrder, sortBy, chang
   }
 
   const copyLink = (link: string) => {
+    setActiveButton(link)
     navigator.clipboard.writeText(`http://79.143.31.216/s/${link}`)
   }
 
@@ -61,7 +64,8 @@ const Table: FC<TableProps> = ({ data, token, headers, isAscOrder, sortBy, chang
           </tr>
         </thead>
         <tbody>
-          {data?.map((item) => {
+          {}
+          {filteredData?.map((item: any) => {
             return (
               <tr key={item.id}>
                 <td className={styles.columns}>{item.id}</td>
@@ -70,8 +74,16 @@ const Table: FC<TableProps> = ({ data, token, headers, isAscOrder, sortBy, chang
                 <td className={styles.columns}>
                   <div className={styles.shortLink}>
                     {item.short}
-                    <a className={styles.copyButton} onClick={() => copyLink(item.short)}>
-                      Copy
+                    <a
+                      className={cn(
+                        {
+                          [styles.active]: activeButton === item.short,
+                        },
+                        styles.copyButton,
+                      )}
+                      onClick={() => copyLink(item.short)}
+                    >
+                      {activeButton === item.short ? 'Copied' : 'Copy'}
                     </a>
                   </div>
                 </td>
