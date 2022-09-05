@@ -71,12 +71,13 @@ const Home: NextPage = () => {
       },
     })
     const data = await res.json()
-    navigator.clipboard.writeText(`http://79.143.31.216/s/${data.short}`)
   }
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken')
-    accessToken && setToken(accessToken)
+    if (typeof window !== 'undefined') {
+      const accessToken = localStorage.getItem('accessToken')
+      accessToken && setToken(accessToken)
+    }
     getLinks()
   }, [])
 

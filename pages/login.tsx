@@ -19,11 +19,14 @@ const Login = () => {
     mode: 'onBlur',
   })
 
+  const setToken = (res: any) => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('accessToken', res.data.access_token)
+    }
+  }
+
   const onSubmit = async (data: FormValues) => {
-    await login(data).then((res) =>
-      //@ts-ignore
-      localStorage.setItem('accessToken', res.data.access_token),
-    )
+    await login(data).then((res: any) => setToken(res))
   }
 
   return (
