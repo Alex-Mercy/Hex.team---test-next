@@ -62,33 +62,33 @@ const Table: FC<TableProps> = ({ headers, isAscOrder, sortBy, changeSortOrder, f
           </tr>
         </thead>
         <tbody>
-          {}
-          {filteredData?.map((item: any) => {
-            return (
-              <tr key={item.id}>
-                <td className={styles.columns}>{item.id}</td>
-                <td className={cn(styles.columns, styles.target)}>{item.target}</td>
+          {filteredData &&
+            filteredData?.map((item: any) => {
+              return (
+                <tr key={item.id}>
+                  <td className={styles.columns}>{item.id}</td>
+                  <td className={cn(styles.columns, styles.target)}>{item.target}</td>
 
-                <td className={styles.columns}>
-                  <div className={styles.shortLink}>
-                    {item.short}
-                    <a
-                      className={cn(
-                        {
-                          [styles.active]: activeButton === item.short,
-                        },
-                        styles.copyButton,
-                      )}
-                      onClick={() => copyLink(item.short)}
-                    >
-                      {activeButton === item.short ? 'Copied' : 'Copy'}
-                    </a>
-                  </div>
-                </td>
-                <td className={cn(styles.columns, styles.columnsNumber)}>{item.counter}</td>
-              </tr>
-            )
-          })}
+                  <td className={styles.columns}>
+                    <div className={styles.shortLink}>
+                      {item.short}
+                      <a
+                        className={cn(
+                          {
+                            [styles.active]: activeButton === item.short,
+                          },
+                          styles.copyButton,
+                        )}
+                        onClick={() => copyLink(item.short)}
+                      >
+                        {activeButton === item.short ? 'Copied' : 'Copy'}
+                      </a>
+                    </div>
+                  </td>
+                  <td className={cn(styles.columns, styles.columnsNumber)}>{item.counter}</td>
+                </tr>
+              )
+            })}
         </tbody>
       </table>
     </div>
